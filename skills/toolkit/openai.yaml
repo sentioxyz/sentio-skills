@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sentio Toolkit"
+  short_description: "Sentio processors, SQL, and alerts toolkit"
+  default_prompt: "Help me build a Sentio processor, run Sentio SQL, or configure alerts."
