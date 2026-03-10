@@ -1,4 +1,4 @@
-# managing-sentio-processors
+# sentio-processors
 
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin for building blockchain data processors with the [Sentio SDK](https://docs.sentio.xyz/).
 
@@ -11,13 +11,13 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin for build
 /plugin marketplace add sentioxyz/sentio-skills
 
 # Install the plugin
-/plugin install managing-sentio-processors
+/plugin install sentio-processors
 ```
 
 ### ClawHub
 
 ```bash
-npx clawhub@latest install managing-sentio-processors
+npx clawhub@latest install sentio-processors
 ```
 
 ## What It Does
@@ -56,7 +56,7 @@ sentio-skills/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── skills/
-│   └── managing-sentio-processors/
+│   └── sentio-processors/
 │       ├── SKILL.md
 │       └── references/
 │           ├── advanced-patterns.md
@@ -70,4 +70,4 @@ sentio-skills/
 
 - [Sentio Documentation](https://docs.sentio.xyz/)
 - [100+ Production Processor Examples](https://github.com/sentioxyz/sentio-processors)
-- [ClawHub Page](https://clawhub.ai/Poytr1/managing-sentio-processors)
+- [ClawHub Page](https://clawhub.ai/sentio-xyz/sentio-processors)
