@@ -1,6 +1,6 @@
-# sentio-processors
+# sentio-ai-kit
 
-A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin for building blockchain data processors with the [Sentio SDK](https://docs.sentio.xyz/).
+A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin with skills for working with the [Sentio](https://docs.sentio.xyz/) platform — building blockchain data processors, running SQL queries, managing alerts, dashboards, and endpoints.
 
 ## Install
 
@@ -11,13 +11,13 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin for build
 /plugin marketplace add sentioxyz/sentio-ai-kit
 
 # Install the plugin
-/plugin install sentio-processors
+/plugin install sentio-ai-kit
 ```
 
 ### ClawHub
 
 ```bash
-npx clawhub@latest install sentio-processors
+npx clawhub@latest install sentio-ai-kit
 ```
 
 ## What It Does

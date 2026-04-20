@@ -5,9 +5,9 @@
   },
   "plugins": [
     {
-      "name": "sentio-processors",
+      "name": "sentio-ai-kit",
       "source": "./",
-      "description": "Skill for building blockchain data processors with the Sentio SDK — covers project setup, multi-chain processor patterns, DeFi protocols, testing, and deployment",
+      "description": "Skills for working with the Sentio platform — building blockchain data processors, running SQL queries, managing alerts, dashboards, and endpoints",
       "version": "1.0.0"
     }
   ]
