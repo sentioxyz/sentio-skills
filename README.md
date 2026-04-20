@@ -56,13 +56,15 @@ sentio-ai-kit/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── skills/
-│   └── sentio-processors/
-│       ├── SKILL.md
-│       └── references/
-│           ├── advanced-patterns.md
-│           ├── defi-patterns.md
-│           ├── store-and-points.md
-│           └── production-examples.md
+│   ├── sentio-processor/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       ├── advanced-patterns.md
+│   │       ├── defi-patterns.md
+│   │       ├── store-and-points.md
+│   │       └── production-examples.md
+│   └── sentio-platform/
+│       └── SKILL.md
 └── README.md
 ```
 

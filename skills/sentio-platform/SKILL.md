@@ -1,9 +1,9 @@
 ---
-name: sentio-toolkit
+name: sentio-platform
 description: Build, modify, or troubleshoot Sentio projects across processors, Sentio SQL in Data Studio, alerting, and dashboards. Use for tasks involving @sentio/sdk handlers in processor.ts, sentio.yaml config, metrics/event logs/entity store, running or sharing Sentio SQL queries, creating/updating alert rules and notification channels, or managing dashboards and panels.
 ---
 
-# sentio-toolkit
+# sentio-platform
 
 Use `npx @sentio/cli@latest` for SQL, data queries, alerts, endpoints, and project management.
 
