@@ -36,7 +36,7 @@ This skill follows a layered approach:
 ## Project Lifecycle
 
 ```
-sentio create → sentio add → sentio gen → write processor → sentio test → sentio upload
+sentio create → sentio add → sentio gen → write processor → sentio test → sentio upload → sentio processor status
 ```
 
 ### 1. Initialize Project
@@ -79,12 +79,9 @@ sentio upload --checkpoint "1:18000000"   # Rollback to specific block
 sentio upload --num-workers=4             # Parallel workers for compute-heavy processors
 ```
 
-### 4. AI Processor Generation
+### 4. Verify Processor is Running
 
-```bash
-sentio generate-processor --prompt "Track token transfers and calculate volume"
-sentio gen-processor --prompt "Monitor DEX swaps"  # Short alias
-```
+After upload, use `sentio processor status --project <owner>/<slug>` to check the processor status. If the processor is in `ERROR` state, use `sentio processor logs --project <owner>/<slug> --level ERROR` to get error details, diagnose the issue, fix the code, and re-upload.
 
 ## package.json
 
