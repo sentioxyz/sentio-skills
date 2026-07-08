@@ -251,7 +251,7 @@
       <nav>
         <div class="nav-item active">
           <svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 8l8 5 8-5"/></svg>
-          Inbox <span class="count">8</span>
+          Inbox <span class="count">11</span>
         </div>
         <div class="nav-item">
           <svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>
@@ -282,7 +282,7 @@
     <section class="list">
       <div class="list-head">
         <h1>Inbox</h1>
-        <span>8 unread &middot; 28 total</span>
+        <span>11 unread &middot; 33 total</span>
       </div>
       <div class="messages" id="messages"></div>
     </section>
@@ -446,6 +446,74 @@ const emails = [
       "Completion is required to retain lab and production-floor access. You'll get a calendar hold with the link.",
     ],
     sig: "Tesla Learning & Development"
+  },
+  {
+    id: 11, unread: true, tag: ["eng","Engineering"],
+    from: "Energy Software", email: "energy-sw@tesla.com", initials: "ES", color: "linear-gradient(135deg,#3457d5,#1d3384)",
+    time: "Thu", when: "Thursday, 9:22 AM",
+    subject: "Virtual Power Plant hits 100 MW during heat event",
+    preview: "Yesterday's VPP dispatch pulled 100 MW from Powerwall fleets across California. Zero…",
+    body: [
+      "Hi Chongzhe,",
+      "During yesterday's grid heat event, our California Virtual Power Plant dispatched a record 100 MW from participating Powerwall fleets — with zero customer opt-outs during the event window.",
+      "LIST:14,200 homes contributed to the dispatch.|Average backup reserve held above 20% throughout.|Grid operator credited the VPP with easing a Stage 2 emergency.",
+      "Great validation of the fleet-control stack. Retro is Monday at 11.",
+    ],
+    sig: "Tesla Energy Software"
+  },
+  {
+    id: 12, unread: true, tag: ["ops","Operations"],
+    from: "Supply Chain", email: "supply-chain@tesla.com", initials: "SP", color: "linear-gradient(135deg,#e0aa5a,#8a6318)",
+    time: "Wed", when: "Wednesday, 4:55 PM",
+    subject: "Lithium supply agreement signed — 5-year offtake",
+    preview: "We've finalized a 5-year lithium hydroxide offtake agreement. This locks in pricing for…",
+    body: [
+      "Team,",
+      "We've signed a 5-year lithium hydroxide offtake agreement that secures a significant share of our 4680 cathode needs and locks in favorable pricing through 2031.",
+      "LIST:Deliveries begin Q4 this year.|Material qualifies for domestic-content IRA credits.|Reduces our exposure to spot-market volatility by an estimated 40%.",
+      "More detail in the sourcing review next week.",
+    ],
+    sig: "Tesla Supply Chain"
+  },
+  {
+    id: 13, unread: true, tag: ["hr","People & HR"],
+    from: "IT Help Desk", email: "it-help@tesla.com", initials: "IT", color: "linear-gradient(135deg,#5cc98a,#1f6b41)",
+    time: "Wed", when: "Wednesday, 8:40 AM",
+    subject: "Your new laptop is ready for pickup",
+    preview: "The MacBook Pro you requested has arrived and is imaged with the standard build. Pick it…",
+    body: [
+      "Hi Chongzhe,",
+      "The laptop you requested has arrived and is imaged with the standard engineering build. You can pick it up at the IT bar on the 2nd floor any weekday between 9 AM and 5 PM.",
+      "Bring your badge. Data migration from your old machine can be scheduled at pickup.",
+    ],
+    sig: "Tesla IT Help Desk"
+  },
+  {
+    id: 14, unread: false, tag: ["exec","Executive"],
+    from: "Franz von Holzhausen", email: "franz@tesla.com", initials: "FH", color: "linear-gradient(135deg,#e31937,#8f0f20)",
+    time: "Tue", when: "Tuesday, 6:15 PM",
+    subject: "Thanks for the aero input on the refresh",
+    preview: "Wanted to say thanks — your drag numbers on the underbody tray changed the whole…",
+    body: [
+      "Chongzhe,",
+      "Just a quick note to say thanks. Your drag numbers on the revised underbody tray changed the whole conversation in today's review — we're going with the flatter profile.",
+      "Let's grab time next week to look at the wheel aero covers before we commit tooling.",
+    ],
+    sig: "Franz\nChief Designer, Tesla"
+  },
+  {
+    id: 15, unread: false, tag: ["ops","Operations"],
+    from: "Travel Desk", email: "travel@tesla.com", initials: "TD", color: "linear-gradient(135deg,#888,#444)",
+    time: "Tue", when: "Tuesday, 10:02 AM",
+    subject: "Itinerary confirmed: Palo Alto → Austin (Giga tour)",
+    preview: "Your flight and ground transport for the Giga Texas visit are confirmed. Details and…",
+    body: [
+      "Hi Chongzhe,",
+      "Your travel for the Giga Texas visit is confirmed:",
+      "LIST:Outbound: Jul 21, SJC → AUS, 8:05 AM|Return: Jul 23, AUS → SJC, 6:40 PM|Ground: EV rental reserved at AUS; charging pre-authorized.",
+      "Expense pre-approval is attached to your profile. Have a great trip.",
+    ],
+    sig: "Tesla Travel Desk"
   },
 ];
 
