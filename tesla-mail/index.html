@@ -251,7 +251,7 @@
       <nav>
         <div class="nav-item active">
           <svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 8l8 5 8-5"/></svg>
-          Inbox <span class="count">6</span>
+          Inbox <span class="count">8</span>
         </div>
         <div class="nav-item">
           <svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>
@@ -282,7 +282,7 @@
     <section class="list">
       <div class="list-head">
         <h1>Inbox</h1>
-        <span>6 unread &middot; 24 total</span>
+        <span>8 unread &middot; 28 total</span>
       </div>
       <div class="messages" id="messages"></div>
     </section>
@@ -391,6 +391,61 @@ const emails = [
       "This is an automated reminder — no reply needed.",
     ],
     sig: "Tesla InfoSec"
+  },
+  {
+    id: 7, unread: true, tag: ["exec","Executive"],
+    from: "Investor Relations", email: "ir@tesla.com", initials: "IR", color: "linear-gradient(135deg,#e31937,#8f0f20)",
+    time: "Sun", when: "Sunday, 10:05 AM",
+    subject: "Q2 earnings call — internal prep & quiet period reminder",
+    preview: "Earnings call is July 23 at 4:30pm CT. Quiet period is now in effect — please route all…",
+    body: [
+      "Hi Chongzhe,",
+      "Our Q2 earnings call is scheduled for July 23 at 4:30 PM CT. A few reminders as we head into the close:",
+      "LIST:The quiet period is now in effect through the call — do not discuss financials externally.|Route any press or analyst inquiries to the IR team immediately.|Internal prep deck and Q&A dry-run are on the shared drive; slot sign-ups close Friday.",
+      "If your team owns any metrics referenced in the shareholder deck, please confirm final numbers with us by Wednesday EOD.",
+    ],
+    sig: "Tesla Investor Relations"
+  },
+  {
+    id: 8, unread: true, tag: ["ops","Operations"],
+    from: "Supercharging", email: "supercharging@tesla.com", initials: "SC", color: "linear-gradient(135deg,#e0aa5a,#8a6318)",
+    time: "Sat", when: "Saturday, 3:12 PM",
+    subject: "V4 network milestone: 60,000 stalls live worldwide",
+    preview: "We just energized our 60,000th Supercharger stall. NACS partner onboarding is ahead of…",
+    body: [
+      "Team,",
+      "This weekend we energized our 60,000th Supercharger stall globally — a huge milestone for the network.",
+      "LIST:V4 cabinets now account for 38% of new installs.|NACS partner-vehicle onboarding is 6 weeks ahead of plan.|Average session uptime held at 99.95% for June.",
+      "Thanks to everyone across hardware, firmware, and construction who made this happen.",
+    ],
+    sig: "Supercharging Team"
+  },
+  {
+    id: 9, unread: true, tag: ["eng","Engineering"],
+    from: "Design Studio", email: "design@tesla.com", initials: "DS", color: "linear-gradient(135deg,#3457d5,#1d3384)",
+    time: "Fri", when: "Friday, 5:48 PM",
+    subject: "Roadster clay review — feedback requested by Tuesday",
+    preview: "The updated full-scale clay is in the Hawthorne studio. We'd love engineering input on the…",
+    body: [
+      "Chongzhe,",
+      "The updated full-scale Roadster clay is in the Hawthorne design studio. Before we lock the surfacing, we want engineering input on a couple of areas:",
+      "LIST:Rear diffuser clearance vs. the SpaceX package options.|A-pillar sightline after the latest greenhouse change.|Charge-port door placement relative to the new rear haunch.",
+      "Studio is open for walk-throughs all day Monday. Please drop your notes in the review doc by Tuesday morning.",
+    ],
+    sig: "Tesla Design Studio\nHawthorne, CA"
+  },
+  {
+    id: 10, unread: false, tag: ["hr","People & HR"],
+    from: "Learning & Dev", email: "learning@tesla.com", initials: "LD", color: "linear-gradient(135deg,#5cc98a,#1f6b41)",
+    time: "Thu", when: "Thursday, 1:30 PM",
+    subject: "You're enrolled: High-Voltage Safety recertification",
+    preview: "Your annual HV safety recertification is due August 1. The self-paced module takes about…",
+    body: [
+      "Hi Chongzhe,",
+      "Your annual High-Voltage Safety recertification is due by August 1. You've been auto-enrolled in the self-paced module — it takes about 45 minutes and ends with a short assessment.",
+      "Completion is required to retain lab and production-floor access. You'll get a calendar hold with the link.",
+    ],
+    sig: "Tesla Learning & Development"
   },
 ];
 
