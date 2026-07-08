@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tesla Mail — Internal</title>
+<style>
+  :root {
+    --tesla-red: #e31937;
+    --bg: #0a0a0a;
+    --panel: #141414;
+    --panel-2: #1c1c1c;
+    --line: #2a2a2a;
+    --text: #f4f4f4;
+    --muted: #8a8a8a;
+    --muted-2: #6a6a6a;
+    --accent: #3457d5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Helvetica Neue", "Inter", Arial, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ---------- Top bar ---------- */
+  header.topbar {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 22px;
+    height: 60px;
+    background: #000;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand svg { width: 26px; height: 26px; fill: var(--tesla-red); }
+  .wordmark {
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: 0.42em;
+    color: #fff;
+    padding-left: 4px;
+  }
+  .brand .sub {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 14px;
+    margin-left: 6px;
+    text-transform: uppercase;
+  }
+  .search {
+    flex: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 14px 9px 38px;
+    color: var(--text);
+    font-size: 13.5px;
+    outline: none;
+  }
+  .search input:focus { border-color: #444; }
+  .search::before {
+    content: "";
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px;
+    background: no-repeat center/contain url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%238a8a8a" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>');
+  }
+  .account {
+    display: flex; align-items: center; gap: 10px;
+    margin-left: auto;
+  }
+  .account .who { text-align: right; line-height: 1.2; }
+  .account .who .name { font-size: 13px; font-weight: 600; }
+  .account .who .mail { font-size: 11.5px; color: var(--muted); }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--tesla-red), #8f0f20);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 14px; color: #fff;
+  }
+
+  /* ---------- Layout ---------- */
+  .shell { display: flex; flex: 1; min-height: 0; }
+
+  /* Sidebar */
+  aside {
+    width: 232px;
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .compose {
+    margin: 16px;
+    padding: 11px 16px;
+    background: var(--tesla-red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .15s;
+  }
+  .compose:hover { background: #c9152f; }
+  nav { padding: 4px 10px; overflow-y: auto; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    margin-bottom: 2px;
+  }
+  .nav-item:hover { background: var(--panel-2); }
+  .nav-item.active { background: rgba(227,25,55,0.14); color: #fff; }
+  .nav-item.active .ic { stroke: var(--tesla-red); }
+  .nav-item .ic { width: 17px; height: 17px; stroke: var(--muted); fill: none; stroke-width: 1.8; flex-shrink: 0; }
+  .nav-item .count { margin-left: auto; font-size: 11.5px; color: var(--muted); }
+  .nav-item.active .count { color: var(--tesla-red); font-weight: 600; }
+  .nav-sep { height: 1px; background: var(--line); margin: 10px 12px; }
+  .labels-title { font-size: 10.5px; letter-spacing: 0.14em; color: var(--muted-2); text-transform: uppercase; padding: 4px 12px 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  /* Message list */
+  .list {
+    width: 380px;
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+  .list-head {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .list-head h1 { font-size: 17px; font-weight: 600; }
+  .list-head span { font-size: 12px; color: var(--muted); }
+  .messages { overflow-y: auto; flex: 1; }
+  .msg {
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    display: flex; flex-direction: column; gap: 3px;
+    border-left: 3px solid transparent;
+  }
+  .msg:hover { background: var(--panel); }
+  .msg.active { background: var(--panel-2); border-left-color: var(--tesla-red); }
+  .msg.unread .from, .msg.unread .subj { font-weight: 700; color: #fff; }
+  .msg .row1 { display: flex; align-items: center; gap: 8px; }
+  .msg .from { font-size: 13.5px; color: var(--text); flex: 1; }
+  .msg.unread .from::before {
+    content: ""; display: inline-block; width: 7px; height: 7px;
+    background: var(--tesla-red); border-radius: 50%; margin-right: 8px;
+    vertical-align: middle;
+  }
+  .msg .time { font-size: 11.5px; color: var(--muted); flex-shrink: 0; }
+  .msg .subj { font-size: 13px; color: var(--text); }
+  .msg .preview { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tag { font-size: 10px; padding: 1px 7px; border-radius: 10px; letter-spacing: .04em; font-weight: 600; text-transform: uppercase; }
+  .tag.eng { background: rgba(52,87,213,.18); color: #7d97ee; }
+  .tag.hr { background: rgba(46,160,90,.18); color: #5cc98a; }
+  .tag.exec { background: rgba(227,25,55,.16); color: #ef5c73; }
+  .tag.ops { background: rgba(200,140,40,.18); color: #e0aa5a; }
+
+  /* Reading pane */
+  .reader { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg); }
+  .reader-head { padding: 22px 32px 18px; border-bottom: 1px solid var(--line); }
+  .reader-head h2 { font-size: 21px; font-weight: 600; margin-bottom: 14px; line-height: 1.3; }
+  .reader-meta { display: flex; align-items: center; gap: 12px; }
+  .reader-meta .avatar { width: 42px; height: 42px; font-size: 15px; background: linear-gradient(135deg,#3457d5,#1d3384); }
+  .reader-meta .info { line-height: 1.35; }
+  .reader-meta .info .n { font-size: 14px; font-weight: 600; }
+  .reader-meta .info .e { font-size: 12.5px; color: var(--muted); }
+  .reader-meta .when { margin-left: auto; font-size: 12.5px; color: var(--muted); text-align: right; }
+  .reader-body { padding: 26px 32px; overflow-y: auto; flex: 1; font-size: 14.5px; line-height: 1.72; color: #dcdcdc; }
+  .reader-body p { margin-bottom: 16px; }
+  .reader-body .sig { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .reader-body ul { margin: 0 0 16px 20px; }
+  .reader-body li { margin-bottom: 6px; }
+  .actions { padding: 16px 32px; border-top: 1px solid var(--line); display: flex; gap: 10px; }
+  .btn {
+    padding: 9px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--line); background: var(--panel-2); color: var(--text);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .btn:hover { background: var(--panel); }
+  .btn.primary { background: var(--tesla-red); border-color: var(--tesla-red); color: #fff; }
+  .btn.primary:hover { background: #c9152f; }
+
+  .footer-note { position: fixed; bottom: 8px; right: 12px; font-size: 10.5px; color: #444; letter-spacing: .04em; }
+
+  @media (max-width: 980px) {
+    .list { width: 320px; }
+    aside { width: 200px; }
+    .brand .sub { display: none; }
+  }
+  @media (max-width: 760px) {
+    .reader { display: none; }
+    .search { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <!-- Tesla emblem -->
+      <svg viewBox="0 0 24 24" aria-label="Tesla" role="img">
+        <path d="M12 5.362l2.475-3.026s4.245.09 8.471 2.054c-1.082 1.636-3.231 2.438-3.231 2.438-.146-1.439-1.154-1.79-4.354-1.79L12 24 8.638 5.038c-3.199 0-4.207.35-4.353 1.79 0 0-2.15-.802-3.232-2.438C4.28 2.444 8.525 2.336 8.525 2.336L12 5.362zm0-4.198c3.6-.028 7.72.572 11.94 3.15.541-.485.803-.809 1.011-1.302C20.463.834 16.529.021 12 0 7.472.02 3.537.834.05 3.012c.209.493.47.817 1.011 1.302C4.28 1.736 8.4 1.136 12 1.164z"/>
+      </svg>
+      <span class="wordmark">TESLA</span>
+      <span class="sub">Mail</span>
+    </div>
+    <div class="search"><input type="text" placeholder="Search internal mail" /></div>
+    <div class="account">
+      <div class="who">
+        <div class="name">Chongzhe Ma</div>
+        <div class="mail">chongzhe@tesla.com</div>
+      </div>
+      <div class="avatar">CM</div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside>
+      <button class="compose">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Compose
+      </button>
+      <nav>
+        <div class="nav-item active">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 8l8 5 8-5"/></svg>
+          Inbox <span class="count">6</span>
+        </div>
+        <div class="nav-item">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>
+          Starred <span class="count">2</span>
+        </div>
+        <div class="nav-item">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"/></svg>
+          Sent
+        </div>
+        <div class="nav-item">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M4 4h13l3 3v13H4z"/><path d="M8 4v6h8V4"/></svg>
+          Drafts <span class="count">1</span>
+        </div>
+        <div class="nav-item">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+          Trash
+        </div>
+        <div class="nav-sep"></div>
+        <div class="labels-title">Labels</div>
+        <div class="nav-item"><span class="dot" style="background:#e31937"></span> Executive</div>
+        <div class="nav-item"><span class="dot" style="background:#3457d5"></span> Engineering</div>
+        <div class="nav-item"><span class="dot" style="background:#5cc98a"></span> People &amp; HR</div>
+        <div class="nav-item"><span class="dot" style="background:#e0aa5a"></span> Operations</div>
+      </nav>
+    </aside>
+
+    <!-- Message list -->
+    <section class="list">
+      <div class="list-head">
+        <h1>Inbox</h1>
+        <span>6 unread &middot; 24 total</span>
+      </div>
+      <div class="messages" id="messages"></div>
+    </section>
+
+    <!-- Reader -->
+    <section class="reader" id="reader"></section>
+  </div>
+
+  <div class="footer-note">Internal mockup — not affiliated with Tesla, Inc.</div>
+
+<script>
+const emails = [
+  {
+    id: 0, unread: true, star: true, tag: ["exec","Executive"],
+    from: "Elon Musk", email: "elon@tesla.com", initials: "EM", color: "linear-gradient(135deg,#e31937,#8f0f20)",
+    time: "8:42 AM", when: "Today, 8:42 AM",
+    subject: "All-hands: Q3 production targets & Optimus update",
+    preview: "Team — we ship or we die. Cybercab line ramps next week and I want everyone focused…",
+    body: [
+      "Team,",
+      "We ship or we die. The Fremont and Austin lines are both green for the Q3 ramp, and the Cybercab pilot line comes online next week. I want every engineering pod focused on throughput and quality — not one at the expense of the other.",
+      "Three things for this week:",
+      "LIST:Optimus Gen-3 hand actuators — final DVT sign-off by Friday.|Cybercab general assembly — close out the top 5 station cycle-time blockers.|Energy — Megapack Lathrop output must hit 40 GWh run-rate.",
+      "All-hands is Thursday 5pm PT in the Palo Alto atrium and streamed to all sites. Bring hard questions.",
+      "Let's build the future.",
+    ],
+    sig: "Elon Musk\nCEO, Tesla, Inc."
+  },
+  {
+    id: 1, unread: true, tag: ["eng","Engineering"],
+    from: "Autopilot Eng", email: "autopilot-eng@tesla.com", initials: "AE", color: "linear-gradient(135deg,#3457d5,#1d3384)",
+    time: "7:15 AM", when: "Today, 7:15 AM",
+    subject: "FSD v13.2 rollout — staged deployment starts today",
+    preview: "The staged rollout for FSD v13.2 begins at 10am PT to the 2% cohort. On-call schedule…",
+    body: [
+      "Hi Chongzhe,",
+      "FSD v13.2 clears the release gate. Staged rollout to the 2% shadow cohort begins at 10:00 AM PT today, expanding to 25% Thursday pending intervention-rate metrics.",
+      "Please keep an eye on the neural-planner regression dashboard — we flagged a slight uptick in disengagements on unprotected left turns during validation. Your team owns the follow-up.",
+      "On-call rotation and dashboards are linked in the release ticket.",
+    ],
+    sig: "Autopilot Engineering\nRelease Management"
+  },
+  {
+    id: 2, unread: true, tag: ["ops","Operations"],
+    from: "Gigafactory Texas", email: "giga-texas-ops@tesla.com", initials: "GT", color: "linear-gradient(135deg,#e0aa5a,#8a6318)",
+    time: "Yesterday", when: "Yesterday, 6:03 PM",
+    subject: "Weekly production report — Week 27",
+    preview: "Model Y output up 4.1% WoW. 4680 cell yield at record high. Details attached…",
+    body: [
+      "Weekly summary for Gigafactory Texas:",
+      "LIST:Model Y: 8,940 units (+4.1% WoW)|Cybertruck: 1,310 units (+9% WoW)|4680 cell yield: 94.6% — new record|Downtime: 2.1 hrs (paint shop preventive maintenance)",
+      "The 4680 dry-cathode line continues to outperform. We expect to fully retire the legacy wet line by end of quarter.",
+    ],
+    sig: "Giga Texas Operations"
+  },
+  {
+    id: 3, unread: true, tag: ["hr","People & HR"],
+    from: "Tesla People", email: "people@tesla.com", initials: "TP", color: "linear-gradient(135deg,#5cc98a,#1f6b41)",
+    time: "Yesterday", when: "Yesterday, 2:20 PM",
+    subject: "Open enrollment + updated stock vesting schedule",
+    preview: "Annual benefits open enrollment is now live through July 25. Review your 2026 elections…",
+    body: [
+      "Hi Chongzhe,",
+      "Benefits open enrollment is live through July 25. A few reminders:",
+      "LIST:Your next RSU tranche vests on August 15.|HSA employer match increased to $1,500 for 2026.|New on-site EV charging perk: free Supercharging at all campus locations.",
+      "Log into the People portal to confirm your elections. No action means your current elections roll over.",
+    ],
+    sig: "Tesla People Team"
+  },
+  {
+    id: 4, unread: true, tag: ["eng","Engineering"],
+    from: "Dojo Team", email: "dojo@tesla.com", initials: "DJ", color: "linear-gradient(135deg,#3457d5,#1d3384)",
+    time: "Mon", when: "Monday, 11:48 AM",
+    subject: "Dojo D2 tile bring-up — need your review",
+    preview: "First D2 training tiles are in the lab. Can you review the thermal telemetry before we…",
+    body: [
+      "Chongzhe,",
+      "The first Dojo D2 training tiles are powered up in the Palo Alto lab. Early numbers look strong — ~2.4x throughput over D1 at iso-power.",
+      "Before we green-light the full cabinet, can you review the thermal telemetry from the burn-in run? We're seeing a hotspot near the west edge of the tile that I want a second opinion on.",
+      "Data is in the shared drive. Would love your notes by Wednesday.",
+    ],
+    sig: "Dojo Hardware Team"
+  },
+  {
+    id: 5, unread: false, tag: ["ops","Operations"],
+    from: "Facilities", email: "facilities@tesla.com", initials: "FC", color: "linear-gradient(135deg,#e0aa5a,#8a6318)",
+    time: "Mon", when: "Monday, 9:10 AM",
+    subject: "Palo Alto HQ — garage closure this weekend",
+    preview: "The north parking structure will be closed Saturday for Supercharger installation…",
+    body: [
+      "Notice to all Palo Alto HQ staff:",
+      "The north parking structure will be closed this Saturday, July 12, from 6 AM to 8 PM for the installation of 12 new V4 Superchargers.",
+      "Please use the south structure or street parking. The new stalls will be live Monday.",
+    ],
+    sig: "Tesla Facilities"
+  },
+  {
+    id: 6, unread: false, tag: ["eng","Engineering"],
+    from: "Security Team", email: "infosec@tesla.com", initials: "IS", color: "linear-gradient(135deg,#888,#444)",
+    time: "Sun", when: "Sunday, 4:30 PM",
+    subject: "[Action required] Rotate your VPN certificate",
+    preview: "Your device VPN certificate expires in 5 days. Rotate it via the self-service portal…",
+    body: [
+      "Hi Chongzhe,",
+      "Our records show your device VPN certificate expires in 5 days. Please rotate it through the self-service security portal to avoid losing access to internal resources.",
+      "This is an automated reminder — no reply needed.",
+    ],
+    sig: "Tesla InfoSec"
+  },
+];
+
+const messagesEl = document.getElementById('messages');
+const readerEl = document.getElementById('reader');
+
+function tagClass(t){ return t[0]; }
+
+function renderList(){
+  messagesEl.innerHTML = emails.map(e => `
+    <div class="msg ${e.unread?'unread':''} ${e.id===0?'active':''}" data-id="${e.id}">
+      <div class="row1">
+        <span class="from">${e.from}</span>
+        <span class="tag ${tagClass(e.tag)}">${e.tag[1]}</span>
+        <span class="time">${e.time}</span>
+      </div>
+      <div class="subj">${e.subject}</div>
+      <div class="preview">${e.preview}</div>
+    </div>`).join('');
+  messagesEl.querySelectorAll('.msg').forEach(el => {
+    el.addEventListener('click', () => open(parseInt(el.dataset.id)));
+  });
+}
+
+function bodyHtml(e){
+  return e.body.map(p => {
+    if(p.startsWith('LIST:')){
+      const items = p.slice(5).split('|').map(i=>`<li>${i}</li>`).join('');
+      return `<ul>${items}</ul>`;
+    }
+    return `<p>${p}</p>`;
+  }).join('') + `<div class="sig">${e.sig.replace(/\n/g,'<br>')}</div>`;
+}
+
+function open(id){
+  const e = emails.find(x=>x.id===id);
+  e.unread = false;
+  document.querySelectorAll('.msg').forEach(el=>el.classList.toggle('active', parseInt(el.dataset.id)===id));
+  document.querySelectorAll('.msg').forEach(el=>{ if(parseInt(el.dataset.id)===id) el.classList.remove('unread'); });
+  readerEl.innerHTML = `
+    <div class="reader-head">
+      <h2>${e.subject}</h2>
+      <div class="reader-meta">
+        <div class="avatar" style="background:${e.color}">${e.initials}</div>
+        <div class="info">
+          <div class="n">${e.from} <span style="color:var(--muted);font-weight:400">&lt;${e.email}&gt;</span></div>
+          <div class="e">to chongzhe@tesla.com</div>
+        </div>
+        <div class="when">${e.when}</div>
+      </div>
+    </div>
+    <div class="reader-body">${bodyHtml(e)}</div>
+    <div class="actions">
+      <button class="btn primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 17l-6-5 6-5"/><path d="M3 12h12a5 5 0 0 1 5 5v1"/></svg>
+        Reply
+      </button>
+      <button class="btn">Reply all</button>
+      <button class="btn">Forward</button>
+      <button class="btn">Archive</button>
+    </div>`;
+}
+
+renderList();
+open(0);
+</script>
+</body>
+</html>
