@@ -4753,6 +4753,10 @@
           },
           "type": "array"
         },
+        "timeseriesSchemaVersion": {
+          "format": "int32",
+          "type": "integer"
+        },
         "uploadedAt": {
           "format": "date-time",
           "type": "string"
